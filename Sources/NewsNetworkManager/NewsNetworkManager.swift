@@ -10,7 +10,7 @@ import Foundation
 public protocol NetworkManager {
     func getHeadlines(
         country: Country,
-        category: Category,
+        category: Category?,
         query: String?,
         pageSize: Int,
         page: Int
@@ -33,10 +33,10 @@ public protocol NetworkManager {
     func getSources() async -> Result<SourceResponse, NetworkManagerError>
 }
 
-extension NetworkManager {
+public extension NetworkManager {
     func getHeadlines(
         country: Country = .ru,
-        category: Category = .general,
+        category: Category? = nil,
         query: String?,
         pageSize: Int = 20,
         page: Int = 1
@@ -94,23 +94,20 @@ public final actor NetworkManagerClient: NetworkManager {
     }
     
     public func getHeadlines(
-        country: Country,
-        category: Category,
+        country: Country = .ru,
+        category: Category? = nil,
         query: String?,
-        pageSize: Int,
-        page: Int
+        pageSize: Int = 20,
+        page: Int = 1
     ) async -> Result<ArticlesResponse, NetworkManagerError> {
         
         var params = [
             "country": country.rawValue,
-            "category": category.rawValue,
             "pageSize": String(pageSize),
             "page": String(page)
         ]
-        
-        if let query {
-            params["query"] = query
-        }
+        params["query"] = query
+        params["category"] = category?.rawValue
         
         return await sendRequest(
             .topHeadlines,
@@ -120,16 +117,16 @@ public final actor NetworkManagerClient: NetworkManager {
     
     public func getArticles(
         q: String?,
-        searchIn: [SearchIn],
-        sources: [String],
-        domains: [String],
-        excludeDomains: [String],
-        from: String?,
-        to: String?,
-        language: Language?,
-        sortBy: SortBy,
-        pageSize: Int,
-        page: Int
+        searchIn: [SearchIn] = [],
+        sources: [String] = [],
+        domains: [String] = [],
+        excludeDomains: [String] = [],
+        from: String? = nil,
+        to: String? = nil,
+        language: Language? = nil,
+        sortBy: SortBy = .publishedAt,
+        pageSize: Int = 20,
+        page: Int = 1
     ) async -> Result<ArticlesResponse, NetworkManagerError> {
         
         var params = [
