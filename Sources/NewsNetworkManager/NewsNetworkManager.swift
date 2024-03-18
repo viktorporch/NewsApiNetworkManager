@@ -85,7 +85,7 @@ public final actor NetworkManagerClient: NetworkManager {
     private let session: URLSession
     private let decoder: JSONDecoder
     
-    init(key: String) {
+    public init(key: String) {
         self.key = key
         self.session = URLSession(configuration: .default)
         
