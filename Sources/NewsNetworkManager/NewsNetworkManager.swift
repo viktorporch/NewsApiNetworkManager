@@ -217,7 +217,7 @@ public enum Country: String {
 }
 
 public enum Category: String {
-    case business, entertainment, general, health, science, sports, technology
+    case all, business, entertainment, general, health, science, sports, technology
 }
 
 public enum NetworkManagerError: Error {
