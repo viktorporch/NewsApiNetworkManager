@@ -216,7 +216,7 @@ public enum Country: String {
     case ru, us
 }
 
-public enum Category: String {
+public enum Category: String, CaseIterable {
     case all, business, entertainment, general, health, science, sports, technology
 }
 
